@@ -64,13 +64,17 @@
                     "type": "inputText",
                     "required": false,
                     "label": "Config.paymentNameLabel",
-                    "options": {}
+                    "options": {
+                        "defaultValue": "PaymentMethod.novalnet_frontend_name"
+                    }
                 },
                 "description": {
                     "type": "inputText",
                     "required": false,
                     "label": "Config.descriptionLabel",
-                    "options": {}
+                    "options": {
+                        "defaultValue": "PaymentMethod.payment_description"
+                    }
                 },
                 "on_hold": {
                     "type": "inputText",
