@@ -19,6 +19,9 @@ use Plenty\Plugin\Templates\Twig;
 use Novalnet\Helper\PaymentHelper;
 use Plenty\Modules\Comment\Contracts\CommentRepositoryContract;
 use \Plenty\Modules\Authorization\Services\AuthHelper;
+use Plenty\Modules\Order\Models\Order;
+use Plenty\Modules\Payment\Models\Payment;
+use Plenty\Modules\Payment\Contracts\PaymentRepositoryContract;
 
 /**
  * Class NovalnetOrderConfirmationDataProvider
@@ -31,24 +34,23 @@ class NovalnetOrderConfirmationDataProvider
      * Setup the Novalnet transaction comments for the requested order
      *
      * @param Twig $twig
+     * @param PaymentRepositoryContract $PaymentRepositoryContract
      * @param Arguments $arg
      * @return string
      */
-    public function call(Twig $twig, $args)
+    public function call(Twig $twig,PaymentRepositoryContract $paymentRepositoryContract, $args)
     {
         $paymentHelper = pluginApp(PaymentHelper::class);
         $paymentMethodId = $paymentHelper->getPaymentMethod();
         $order = $args[0];
-
-        if(isset($order->order))
-            $order = $order->order;
-
-        foreach($order->properties as $property)
-        {
-			$property = (object)$property;
-            if($property->typeId == '3' && $property->value == $paymentMethodId)
+        $payments		=	$paymentRepositoryContract->getPaymentsByOrderId($order['id']);
+       
+        foreach($payments as $payment)
+        {             
+       
+            if( $paymentMethodId == $payment->mopId)
             {
-                $orderId = (int) $property->orderId;
+                $orderId = (int) $payment->order['orderId'];
 
                 $authHelper = pluginApp(AuthHelper::class);
                 $orderComments = $authHelper->processUnguarded(
@@ -58,7 +60,7 @@ class NovalnetOrderConfirmationDataProvider
                             return $commentsObj->listComments();
                         }
                 );
-
+               
                 $comment = '';
                 foreach($orderComments as $data)
                 {
