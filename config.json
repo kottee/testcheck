@@ -65,7 +65,7 @@
                     "required": false,
                     "label": "Config.paymentNameLabel",
                     "options": {
-                        "defaultValue": "PaymentMethod.novalnet_frontend_name"
+                        "defaultValue": "Config.vendorIdTooltip"
                     }
                 },
                 "description": {
@@ -73,7 +73,7 @@
                     "required": false,
                     "label": "Config.descriptionLabel",
                     "options": {
-                        "defaultValue": "PaymentMethod.payment_description"
+                        "defaultValue": "Config.vendorIdTooltip"
                     }
                 },
                 "on_hold": {
